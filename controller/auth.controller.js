@@ -1,6 +1,8 @@
 const { error } = require('console')
 const User = require('../modal/authmodal.js')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+const { sign } = require('crypto')
 
 const registerUser = async (req, res) => {
     const {username, email, password} = req.body
@@ -38,6 +40,34 @@ const registerUser = async (req, res) => {
             res.status(500).json({error:'An error occured while register the user'})
         }
 }
+
+const loginUser = async (req, res) => {
+    const {email, password} = req.body
+    if(!email || !password){
+        return res.status(400).json({message:'invalid email or password'})
+    } 
+
+    try{
+        const user = await User.findOne({email})
+        if (!user) {
+            res.status(400).json({message:'user does not exist'})
+        }
+
+        const isPassword = await bcrypt.compare(password, user.password)
+
+        if(!isPassword){
+            return res.status(400).json({ message: 'Invalid password' });
+        }
+        const token = jwt.sign({userId:user._id}, 'secretKey')
+        res.status(200).json({message:'login succes', Token:token})
+
+    }catch(error){
+        console.error('Error logging in:', error);
+        res.status(500).json({ error: 'An error occurred while logging in'})
+    }
+
+}
 module.exports={
-    registerUser
+    registerUser,
+    loginUser
 }
