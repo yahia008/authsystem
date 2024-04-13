@@ -18,6 +18,12 @@ const Userschema = new mongoose.Schema({
         enum:['user', 'admin'],
         default:'user'
     },
+    resetToken:{
+        type:String
+    },
+    tokenExp:{
+        type: Date
+    },
 
     createdAt:{type:Date, default: Date.now}
 })

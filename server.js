@@ -1,6 +1,7 @@
 express = require('express')
 const mongoose = require('mongoose')
 const authRouter = require('./router/router.js')
+const {authUser} = require('./middleware/authmiddleware.js')
 
 const url = "mongodb+srv://yahyatijjani99:4TkxTOuCvo8D4W5i@authsystem.d1fbmis.mongodb.net/?retryWrites=true&w=majority&appName=Authsystem"
 
@@ -10,8 +11,9 @@ app.use(express.json())
 
 app.use('/auth/api', authRouter)
 
-app.get('/home', (req, res)=> {
-    res.send('helo')
+app.get('/home', authUser, (req, res)=> {
+    
+    res.status(200).json({message:'you are authenticated'})
 })
 
 

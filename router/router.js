@@ -8,7 +8,7 @@ const {forgotUser, resetUser } = require('../controller/reset-password.js')
 
  router.post('/register', registerUser)
  router.post('/login', loginUser)
- router.post('forgotUser', forgotUser)
+ router.post('/forgotUser', forgotUser)
  router.post('/resetUser', resetUser)
 
 
